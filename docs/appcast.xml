@@ -2,6 +2,22 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.net/xml-namespaces/sparkle">
   <channel>
         <item>
+            <title>1.0.1</title>
+            <pubDate>Wed, 12 Aug 2026 10:47:36 -0400</pubDate>
+            <link>https://subpop.github.io/Calith</link>
+            <sparkle:version>2</sparkle:version>
+            <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.5</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/subpop/Calith/releases/download/v1.0.1/Calith-1.0.1.dmg" length="9411618" type="application/octet-stream" sparkle:edSignature="fYxN99B5lunAMFBVP9KK5Hq7SmSViqoKFlVn9MB6LcmHFKY5BYU7x5L3aN7q946Q1vtry6bDMCUt9Kd91JvkDg=="/>
+        <description><![CDATA[<div>
+    <h2>1.0.1 (2) (2026-08-12)</h2>
+<ul>
+<li>⚙️ Update app icon</li>
+<li>🔒 Store provider API keys in the keychain</li>
+</ul>
+</div>]]></description>
+</item>
+        <item>
             <title>1.0</title>
             <pubDate>Wed, 12 Aug 2026 09:11:17 -0400</pubDate>
             <link>https://subpop.github.io/Calith</link>
