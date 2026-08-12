@@ -87,7 +87,7 @@ enum LLMProvider: String, CaseIterable, Sendable {
         }
     }
 
-    // MARK: - UserDefaults keys
+    // MARK: - Settings keys
 
     var apiKeyKey: String { "\(rawValue).apiKey" }
     var baseURLKey: String { "\(rawValue).baseURL" }
@@ -195,11 +195,11 @@ final class ConversationViewModel {
         syncProviderSettings()
     }
 
-    /// Reads the active provider's settings from UserDefaults and configures the service.
+    /// Reads the active provider's settings and configures the service.
     func syncProviderSettings() {
         guard let provider = activeProvider else { return }
         let defaults = UserDefaults.standard
-        let apiKey = defaults.string(forKey: provider.apiKeyKey) ?? ""
+        let apiKey = KeychainHelper.shared.read(forKey: provider.apiKeyKey) ?? ""
         let baseURL = defaults.string(forKey: provider.baseURLKey) ?? provider.defaultBaseURL
         let model = defaults.string(forKey: provider.modelKey) ?? provider.defaultModel
         let contextTokenLimit = defaults.string(forKey: provider.contextSizeKey)
@@ -559,7 +559,7 @@ final class ConversationViewModel {
         }
 
         let defaults = UserDefaults.standard
-        let apiKey = defaults.string(forKey: provider.apiKeyKey) ?? ""
+        let apiKey = KeychainHelper.shared.read(forKey: provider.apiKeyKey) ?? ""
         let baseURL = defaults.string(forKey: provider.baseURLKey) ?? provider.defaultBaseURL
         let model = defaults.string(forKey: provider.modelKey) ?? provider.defaultModel
         let contextTokenLimit = defaults.string(forKey: provider.contextSizeKey)

@@ -201,7 +201,7 @@ struct GeneralSettingsTab: View {
         defaults.removeObject(forKey: "activeProvider")
         defaults.removeObject(forKey: "locationEnabled")
         for provider in LLMProvider.allCases {
-            defaults.removeObject(forKey: provider.apiKeyKey)
+            KeychainHelper.shared.delete(forKey: provider.apiKeyKey)
             defaults.removeObject(forKey: provider.baseURLKey)
             defaults.removeObject(forKey: provider.modelKey)
             defaults.removeObject(forKey: provider.contextSizeKey)
@@ -214,21 +214,17 @@ struct GeneralSettingsTab: View {
 private struct ProviderConfigSection: View {
     let provider: LLMProvider
 
-    @AppStorage private var apiKey: String?
+    @State private var apiKey = ""
     @AppStorage private var baseURL: String?
     @AppStorage private var model: String?
     @AppStorage private var contextSizeRaw: String?
 
     init(provider: LLMProvider) {
         self.provider = provider
-        _apiKey = AppStorage(provider.apiKeyKey)
+        _apiKey = State(initialValue: KeychainHelper.shared.read(forKey: provider.apiKeyKey) ?? "")
         _baseURL = AppStorage(provider.baseURLKey)
         _model = AppStorage(provider.modelKey)
         _contextSizeRaw = AppStorage(provider.contextSizeKey)
-    }
-
-    private var apiKeyBinding: Binding<String> {
-        Binding(get: { apiKey ?? "" }, set: { apiKey = $0.isEmpty ? nil : $0 })
     }
 
     private var baseURLBinding: Binding<String> {
@@ -254,17 +250,24 @@ private struct ProviderConfigSection: View {
     var body: some View {
         Section {
             if provider.requiresAPIKey {
-                SecureField(text: apiKeyBinding, prompt: Text("\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}").monospaced()) {
+                SecureField(text: $apiKey, prompt: Text("\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}").monospaced()) {
                     Text("API Key")
                         .font(.body)
                 }
                 .font(.system(.body, design: .monospaced))
+                .onChange(of: apiKey) { _, newValue in
+                    if newValue.isEmpty {
+                        KeychainHelper.shared.delete(forKey: provider.apiKeyKey)
+                    } else {
+                        KeychainHelper.shared.save(newValue, forKey: provider.apiKeyKey)
+                    }
+                }
             }
             TextField("Base URL", text: baseURLBinding, prompt: Text(provider.defaultBaseURL))
             ModelPickerField(
                     provider: provider,
                     selectedModel: modelBinding,
-                    apiKey: apiKey ?? "",
+                    apiKey: apiKey,
                     baseURL: baseURL ?? provider.defaultBaseURL
                 )
             Picker("Context", selection: selectedContextSize) {
