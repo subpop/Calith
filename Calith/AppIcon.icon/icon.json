@@ -7,6 +7,16 @@
       "blend-mode" : "normal",
       "layers" : [
         {
+          "blend-mode" : "soft-light",
+          "fill" : {
+            "solid" : "extended-srgb:0.00000,0.75294,0.90980,1.00000"
+          },
+          "glass" : false,
+          "image-name" : "Facets.png",
+          "name" : "Facets",
+          "opacity" : 1
+        },
+        {
           "fill" : {
             "linear-gradient" : [
               "extended-srgb:0.20392,0.78039,0.34902,1.00000",
@@ -29,7 +39,7 @@
         {
           "fill" : "automatic",
           "image-name" : "Outline 2.png",
-          "name" : "Outline 2"
+          "name" : "Outline"
         }
       ],
       "position" : {
